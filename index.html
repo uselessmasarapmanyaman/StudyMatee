@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StudyMate</title>
+<style>
+:root{--mar:#721C24;--mard:#5A141B;--gold:#D4AF37;--bg:#FDFBF7;--card:#fff;--in:#F6F1EA;--tx:#2a1c1e;--mu:#7a6a6c;--ok:#2e7d4f;--bd:#eadfd2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1a1214;--card:#251a1d;--in:#322327;--tx:#f3e9e6;--mu:#b39ea0;--bd:#3d2b30}}
+:root[data-theme=dark]{--bg:#1a1214;--card:#251a1d;--in:#322327;--tx:#f3e9e6;--mu:#b39ea0;--bd:#3d2b30}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 Georgia,'Times New Roman',serif}
+button,input,select,textarea{font:inherit;color:inherit}
+#app{max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:40px}
+.top{display:flex;align-items:center;gap:8px;background:var(--mar);color:#fff;padding:10px 12px;border-bottom:3px solid var(--gold);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.top h1{flex:1;margin:0;font-size:18px}.top button{background:none;border:0;color:#fff;font-size:22px;cursor:pointer;padding:4px 10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px}
+.hero{background:linear-gradient(135deg,var(--mard),var(--mar));color:#fff;margin:0;padding:26px 18px;text-align:center}
+.hero b{font-size:30px;display:block}.hero small{color:var(--gold);letter-spacing:.14em}
+input,select,textarea{width:100%;background:var(--in);border:1px solid var(--bd);border-radius:10px;padding:12px;margin:5px 0}
+textarea{min-height:110px}
+.btn{background:var(--mar);color:#fff;border:0;border-radius:10px;padding:13px;width:100%;cursor:pointer;font-weight:700;margin:5px 0}
+.btn.alt{background:var(--card);color:var(--mar);border:1px solid var(--mar)}.btn.sm{width:auto;padding:9px 14px}
+.btn:disabled{opacity:.5}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.row>.fix{flex:none}
+.nav{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:13px;margin:8px 12px;width:calc(100% - 24px);cursor:pointer}
+.nav i{font-style:normal;font-size:22px;width:34px;text-align:center}.nav span{flex:1;font-weight:700}
+.gs{display:flex;gap:8px;margin:0 12px}.g{flex:1;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px 4px;text-align:center}
+.g svg{width:64px;height:64px}.g b{display:block;font-size:17px}.g small{color:var(--mu)}
+.mu{color:var(--mu);font-size:13px}.ok{color:var(--ok)}.err{color:#c0392b}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal .d{aspect-ratio:1;border:0;border-radius:10px;background:var(--in);cursor:pointer;position:relative}
+.cal .d.t{outline:2px solid var(--gold)}.cal .d.s{background:var(--mar);color:#fff}.cal .d.h::after{content:"";position:absolute;bottom:4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--gold)}
+.cal .w{font-size:12px;color:var(--mu)}
+.task{padding:10px;border-radius:10px;background:var(--in);margin:6px 0;cursor:pointer;border:2px solid transparent}.task.sel{border-color:var(--gold)}.task.dn{text-decoration:line-through;opacity:.6}
+.ring{width:210px;height:210px;margin:8px auto;display:block;background:none;border:0;cursor:pointer;position:relative}
+.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:400;color:var(--tx)}
+.msgs{max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.m{max-width:82%;padding:8px 12px;border-radius:14px;background:var(--in);white-space:pre-wrap;align-self:flex-start}.m.me{background:var(--mar);color:#fff;align-self:flex-end}.m small{display:block;opacity:.7;font-size:11px}
+.tabs{display:flex;margin:12px 12px 0;gap:6px}.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--card);cursor:pointer}.tabs .on{background:var(--mar);color:#fff}
+.bar{height:14px;background:var(--in);border-radius:7px;overflow:hidden;flex:1}.bar i{display:block;height:100%;background:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}.stats b{font-size:24px;display:block;color:var(--mar)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .stats b{color:var(--gold)}}
+.opt{display:block;width:100%;text-align:left;background:var(--in);border:2px solid transparent;border-radius:10px;padding:12px;margin:6px 0;cursor:pointer}.opt.good{border-color:var(--ok)}.opt.bad{border-color:#c0392b}
+.mod{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:20;padding:20px}.mod>div{background:var(--card);border-radius:14px;padding:18px;max-width:380px;width:100%}
+.tw{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:20px;z-index:30;max-width:90%}
+.sw{display:flex;align-items:center;gap:8px;margin:8px 0}.sw input{width:auto;margin:0}
+</style></head><body><div id="app"></div>
+<script>
+/* ---------- storage ---------- */
+const mem={};
+const S={get(k,d){try{const v=localStorage.getItem('sm_'+k);return v==null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}},
+set(k,v){mem[k]=v;try{localStorage.setItem('sm_'+k,JSON.stringify(v))}catch(e){}},
+del(k){delete mem[k];try{localStorage.removeItem('sm_'+k)}catch(e){}}};
+const $=s=>document.querySelector(s),app=$('#app');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const p2=n=>String(n).padStart(2,'0');
+const ds=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+const today=()=>ds(new Date());
+const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let user=S.get('current_user',null),timer=null,tick=null;
+function toast(m){const e=document.createElement('div');e.className='tw';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}
+function dlg(msg,btns,input){return new Promise(res=>{const m=document.createElement('div');m.className='mod';
+m.innerHTML=`<div><p style="white-space:pre-wrap">${esc(msg)}</p>${input?'<input id="di" type="'+input+'">':''}<div class="row">${btns.map((b,i)=>`<button class="btn ${i?'':'alt'}" data-i="${i}">${esc(b)}</button>`).join('')}</div></div>`;
+m.onclick=e=>{const b=e.target.closest('button');if(b){const v=input?$('#di').value:null;m.remove();res([btns[b.dataset.i],v])}};document.body.appendChild(m)})}
+/* ---------- data helpers ---------- */
+const hash=s=>{let h=5381;for(const c of s)h=((h<<5)+h+c.charCodeAt(0))>>>0;return h.toString(36)};
+const tasks=()=>S.get('tasks_'+user,[]),focus=()=>S.get('focus_'+user,{});
+function stats(){const t=today(),f=focus(),T=tasks(),fd=f[t]||{s:0,m:0};
+let sessTotal=0,minTotal=0;for(const k in f){sessTotal+=f[k].s;minTotal+=f[k].m}
+const doneTotal=T.filter(x=>x.done).length,doneToday=T.filter(x=>x.doneOn===t).length,open=T.filter(x=>!x.done),
+overdue=open.filter(x=>x.date<t).length,dueToday=open.filter(x=>x.date<=t).length;
+const act=d=>(f[d]&&f[d].s>0)||T.some(x=>x.doneOn===d);let streak=0,d=new Date();if(!act(ds(d)))d.setDate(d.getDate()-1);
+while(act(ds(d))){streak++;d.setDate(d.getDate()-1)}
+return{sessToday:fd.s,sessTotal,minTotal,doneTotal,doneToday,open:open.length,overdue,dueToday,streak}}
+/* ---------- shell ---------- */
+function bar(title,back,right){return `<div class="top"><button onclick="${back||'dash()'}" aria-label="Back">‹</button><h1>${title}</h1>${right||''}</div>`}
+function go(fn){clearInterval(tick);stopAudio();fn();window.scrollTo(0,0)}
+/* ---------- login ---------- */
+let reg=false;
+function login(){user=null;S.del('current_user');
+app.innerHTML=`<div class="hero"><small>PSU</small><b>StudyMate</b><span>PLAN • FOCUS • GROW</span></div>
+<div class="card"><h3 id="lm">${reg?'Create your account':'Log in to continue'}</h3>
+<input id="u" placeholder="Email or username" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password">
+${reg?'<input id="c" type="password" placeholder="Confirm password">':''}
+<button class="btn" id="go">${reg?'Create account':'Log in'}</button>
+<div class="row"><button class="btn alt" id="sw">${reg?'Back to log in':'Create account'}</button><button class="btn alt" id="fg">Forgot password?</button></div></div>
+<div class="card row"><span class="fix" style="font-size:28px">🔔</span><div><b>Stay on track</b><div class="mu">Enable in-app reminders for due tasks and study updates</div></div><input class="fix" type="checkbox" id="nt" style="width:22px" ${S.get('notif',false)?'checked':''}></div>`;
+$('#nt').onchange=e=>S.set('notif',e.target.checked);
+$('#sw').onclick=()=>{reg=!reg;login()};
+$('#go').onclick=()=>{const u=$('#u').value.trim().toLowerCase(),p=$('#p').value,acc=S.get('accounts',{});
+if(!u||!p)return toast('Enter your username and password.');
+if(reg){if(u.length<3)return toast('Username must be at least 3 characters.');if(p.length<6)return toast('Password must be at least 6 characters.');
+if(p!==$('#c').value)return toast('Passwords do not match.');if(acc[u])return toast('That username is already taken on this device.');
+acc[u]=hash(p);S.set('accounts',acc);toast('Account created. Welcome!')}
+else{if(!acc[u])return toast('No account found. Tap Create account first.');if(acc[u]!==hash(p))return toast('Wrong password. Try again.')}
+user=u;S.set('current_user',u);reg=false;dash()};
+$('#fg').onclick=async()=>{const[b,u]=await dlg('Enter your username to reset its password on this device.',['Cancel','Reset password'],'text');if(b!=='Reset password')return;
+const acc=S.get('accounts',{}),k=(u||'').trim().toLowerCase();if(!acc[k])return toast('No account with that username.');
+const[b2,n]=await dlg('Type a new password (at least 6 characters).',['Cancel','New password'],'password');if(b2!=='New password')return;
+if((n||'').length<6)return toast('Password too short. Tap Forgot password to try again.');acc[k]=hash(n);S.set('accounts',acc);toast('Password updated. You can log in now.')}}
+/* ---------- dashboard ---------- */
+function gauge(v,max,col){const r=26,c=2*Math.PI*r,f=max?Math.min(1,v/max):0;
+return `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--in)" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c*f} ${c}" transform="rotate(-90 32 32)"/></svg>`}
+function nextRem(){const r=S.get('rem_'+user,[]),now=Date.now();return r.filter(x=>!x.fired||x.at>now).sort((a,b)=>a.at-b.at)[0]}
+function dash(){go(()=>{if(!user)return login();const s=stats(),nr=nextRem(),on=S.get('rem_on',true);
+const rows=[['📅','Smart Planner',planner],['👥','Tambayan Group',tambayan],['🎯','Focus Room',focusRoom],['🧠','Quiz AI',quiz],['🎓','Coach AI',coach],['📊','My Progress',progress],['⚙','Settings',settings]];
+app.innerHTML=`<div class="top"><button id="mn" aria-label="Menu">☰</button><h1>StudyMate Dashboard</h1></div>
+<p style="margin:14px 14px 4px;font-size:20px">Hello, ${esc(user)}! Here is your day.</p>
+<h3 style="margin:10px 14px 6px">Today's Progress</h3>
+<div class="gs"><div class="g">${gauge(s.sessToday,4,'#D4AF37')}<b>${s.sessToday} / 4</b><small>Focus sessions</small></div>
+<div class="g">${gauge(s.doneToday,s.doneToday+s.dueToday,'#2e7d4f')}<b>${s.doneToday} / ${s.doneToday+s.dueToday}</b><small>Tasks done</small></div>
+<div class="g">${gauge(s.streak,7,'#c0392b')}<b>${s.streak} / 7</b><small>Day streak</small></div></div>
+<p class="mu" style="margin:10px 14px">${s.overdue?'⚠ '+s.overdue+' overdue task(s) in your planner<br>':''}${s.sessToday>=4?'Daily focus goal reached. Great work!<br>':''}Total focus time: ${s.minTotal} min</p>
+${nr&&on?`<p style="margin:0 14px 8px">⏰ Next reminder: ${esc(nr.title)} (${new Date(nr.at).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})})</p>`:''}
+${rows.map((r,i)=>`<button class="nav" data-i="${i}"><i>${r[0]}</i><span>${r[1]}</span>›</button>`).join('')}
+<p class="mu" style="text-align:center;letter-spacing:.2em">PLAN • FOCUS • GROW</p>`;
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>rows[b.dataset.i][2]());
+$('#mn').onclick=async()=>{const opts=['Toggle reminders','Backup to file','Reset my progress','Log out','About StudyMate'];
+const m=document.createElement('div');m.className='mod';m.innerHTML='<div>'+opts.map((o,i)=>`<button class="btn alt" data-i="${i}">${o}</button>`).join('')+'</div>';
+m.onclick=async e=>{const b=e.target.closest('button');if(!b){m.remove();return}m.remove();const o=opts[b.dataset.i];
+if(o==='Toggle reminders'){S.set('rem_on',!S.get('rem_on',true));toast(S.get('rem_on',true)?'Reminders on':'Reminders off');dash()}
+else if(o==='Backup to file'){const d={};Object.keys(localStorage).filter(k=>k.endsWith('_'+user)).forEach(k=>d[k]=localStorage[k]);
+const a=document.createElement('a');a.href='data:application/json,'+encodeURIComponent(JSON.stringify(d));a.download='studymate_'+user+'.json';a.click();toast('Backup saved.')}
+else if(o==='Reset my progress'){const[r]=await dlg('Delete your focus history and completed-task counts? Tasks stay in the planner.',['Cancel','Reset']);if(r==='Reset'){S.del('focus_'+user);S.set('tasks_'+user,tasks().map(t=>({...t,done:false,doneOn:null})));dash()}}
+else if(o==='Log out')login();
+else dlg('StudyMate V2: plan tasks, focus, quiz yourself and study with your group. Data is stored in this browser.',['OK'])};
+document.body.appendChild(m)}})}
+/* reminder checker */
+setInterval(()=>{if(!user||!S.get('rem_on',true))return;const r=S.get('rem_'+user,[]),now=Date.now();let ch=false;
+r.forEach(x=>{if(!x.fired&&x.at<=now){x.fired=1;ch=true;try{navigator.vibrate&&navigator.vibrate(300)}catch(e){}dlg('⏰ Study reminder\n📌 '+x.title,['OK'])}});if(ch)S.set('rem_'+user,r)},30000);
+/* ---------- planner ---------- */
+let vy=new Date().getFullYear(),vm=new Date().getMonth(),sel=today(),selTask=-1;
+function planner(){go(()=>{const T=tasks(),first=new Date(vy,vm,1).getDay(),dim=new Date(vy,vm+1,0).getDate();
+let cells='';for(let i=0;i<first;i++)cells+='<span></span>';
+for(let d=1;d<=dim;d++){const k=vy+'-'+p2(vm+1)+'-'+p2(d);cells+=`<button class="d ${k===today()?'t':''} ${k===sel?'s':''} ${T.some(t=>t.date===k)?'h':''}" data-d="${k}">${d}</button>`}
+const list=T.map((t,i)=>({t,i})).filter(x=>x.t.date===sel);
+app.innerHTML=bar('Smart Planner & Tasks')+`<div class="card"><div class="row"><button class="btn alt sm fix" id="pv">‹</button><b style="text-align:center">${MON[vm]} ${vy}</b><button class="btn alt sm fix" id="nx">›</button></div>
+<div class="cal" style="margin-top:8px">${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<span class="w">${d}</span>`).join('')}${cells}</div></div>
+<div class="card"><b>Tasks for ${sel}</b> <span class="mu">(${list.length})</span>
+${list.map(({t,i})=>`<div class="task ${t.done?'dn':''} ${i===selTask?'sel':''}" data-i="${i}">${t.done?'✓ ':'• '}${esc(t.title)}<div class="mu">${esc(t.subj)} · ${esc(t.cls)} · ${esc(t.cat)}${t.time?' · ⏰ '+t.time:''}</div></div>`).join('')||'<p class="mu">No tasks on this day. Add one below.</p>'}
+<div class="row"><button class="btn alt" id="dn">✓ Mark done</button><button class="btn alt" id="dl">🗑 Delete</button><button class="btn alt" id="td">Today</button></div></div>
+<div class="card"><b>✏ Add task</b><p class="mu" style="margin:2px 0">Due date: ${sel}</p><input id="tt" placeholder="What do you need to do?">
+<select id="sj">${['CC313','MOBDEV 223','CSWEBSYS 313','SAD 223','CPC 223 B','General'].map(x=>`<option>${x}</option>`).join('')}</select>
+<select id="cl">${['BSCS-3A','Group project','Personal'].map(x=>`<option>${x}</option>`).join('')}</select>
+<select id="ct">${['General','Assignment','Quiz','Exam','Project','Reading'].map(x=>`<option>${x}</option>`).join('')}</select>
+<div class="sw"><input type="checkbox" id="rm"><label for="rm">Remind me</label><input type="time" id="tm" value="09:00" style="width:auto;margin-left:auto"></div>
+<button class="btn" id="sv">✔ Save task</button></div>`;
+$('#pv').onclick=()=>{vm--;if(vm<0){vm=11;vy--}planner()};$('#nx').onclick=()=>{vm++;if(vm>11){vm=0;vy++}planner()};
+$('#td').onclick=()=>{const n=new Date();vy=n.getFullYear();vm=n.getMonth();sel=today();planner()};
+document.querySelectorAll('.d').forEach(b=>b.onclick=()=>{sel=b.dataset.d;selTask=-1;planner()});
+document.querySelectorAll('.task').forEach(b=>b.onclick=()=>{selTask=+b.dataset.i;planner()});
+$('#dn').onclick=()=>{if(selTask<0)return toast('Tap a task in the list first.');const T=tasks();if(T[selTask].done)return toast('That task is already done.');T[selTask].done=true;T[selTask].doneOn=today();S.set('tasks_'+user,T);toast('Nice work! Task completed.');planner()};
+$('#dl').onclick=async()=>{if(selTask<0)return toast('Tap a task in the list first.');const[r]=await dlg('Delete this task?',['Cancel','Yes']);if(r!=='Yes')return;const T=tasks();T.splice(selTask,1);S.set('tasks_'+user,T);selTask=-1;planner()};
+$('#sv').onclick=()=>{const title=$('#tt').value.trim();if(!title)return toast('Type a task title first.');
+const t={title,subj:$('#sj').value,cls:$('#cl').value,cat:$('#ct').value,date:sel,done:false};
+if($('#rm').checked){t.time=$('#tm').value;const[h,m]=t.time.split(':'),[y,mo,d]=sel.split('-');const at=new Date(+y,mo-1,+d,+h,+m).getTime();
+const r=S.get('rem_'+user,[]);r.push({title,at});S.set('rem_'+user,r)}
+const T=tasks();T.push(t);S.set('tasks_'+user,T);toast('Task saved for '+sel+(t.time?' · reminder '+t.time:''));planner()}})}
+/* ---------- focus room ---------- */
+let ac=null,nodes=[],fm='focus',fmin=S.get('focus_default',25),run=false,endMs=0,rem=fmin*60,sessN=0;
+function stopAudio(){nodes.forEach(n=>{try{n.stop?n.stop():n.disconnect()}catch(e){}});nodes=[]}
+function playMusic(k){stopAudio();if(k==='No music')return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+const g=ac.createGain();g.gain.value=.25;g.connect(ac.destination);nodes.push(g);
+if(k==='Calm pad'){[220,277.2,329.6].forEach(f=>{const o=ac.createOscillator();o.type='sine';o.frequency.value=f;o.connect(g);o.start();nodes.push(o)});return}
+const b=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate),d=b.getChannelData(0);let l=0;
+for(let i=0;i<d.length;i++){const w=Math.random()*2-1;if(k==='Brown noise'){l=(l+.02*w)/1.02;d[i]=l*3.5}else d[i]=w}
+const s=ac.createBufferSource();s.buffer=b;s.loop=true;let out=s;
+if(k==='Soft rain'){const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=3000;s.connect(f);out=f;nodes.push(f)}
+out.connect(g);s.start();nodes.push(s)}catch(e){toast('Audio not available.')}}
+function focusRoom(){go(()=>{const f=focus()[today()]||{s:0,m:0};
+app.innerHTML=bar('Focus Room',"tryLeave()")+`<div class="card" style="text-align:center"><b id="md">${fm==='focus'?'FOCUS MODE':'BREAK TIME'}</b>
+<button class="ring" id="rg"><svg viewBox="0 0 100 100" width="210" height="210"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--in)" stroke-width="7"/><circle id="arc" cx="50" cy="50" r="44" fill="none" stroke="var(--gold)" stroke-width="7" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg><b id="tm"></b></button></div>
+<div class="card"><span id="fl">Focus session: ${fmin} min</span><input type="range" id="sl" min="5" max="60" step="5" value="${fmin}"></div>
+<div class="card"><label for="ms">🎧 Choose playlist</label><select id="ms"><option>No music</option><option>Soft rain</option><option>Brown noise</option><option>Calm pad</option></select></div>
+<div style="margin:0 12px"><button class="btn" id="st">▶ Start Focus</button><div class="row"><button class="btn alt" id="rs">↻ Reset</button><button class="btn alt" id="bk">☕ 5-min break</button></div></div>
+<p style="text-align:center" id="ss">Sessions today: ${f.s} of 4 · ${f.m} min focused</p><p class="mu" style="text-align:center">Every 4th session earns a 15-minute break.</p>`;
+const tot=()=>fm==='focus'?fmin*60:(sessN>0&&(focus()[today()]||{s:0}).s%4===0&&fm==='break15'?900:300);let total=fm==='focus'?fmin*60:rem>0?Math.max(rem,300):300;
+const draw=()=>{$('#tm').textContent=p2(Math.floor(rem/60))+':'+p2(rem%60);$('#arc').setAttribute('stroke-dasharray',(2*Math.PI*44*(1-rem/total))+' 999')};
+const setPhase=(m,secs)=>{fm=m;total=secs;rem=secs;run=false;focusRoom_keep()};
+function focusRoom_keep(){$('#md').textContent=fm==='focus'?'FOCUS MODE':'BREAK TIME';$('#st').textContent=fm==='focus'?'▶ Start Focus':'▶ Start Break';$('#bk').textContent=fm==='focus'?'☕ 5-min break':'🎯 Back to focus';draw()}
+draw();focusRoom_keep();
+const stop=()=>{clearInterval(timer);run=false;$('#st').textContent=fm==='focus'?'▶ Resume':'▶ Resume'};
+$('#sl').oninput=e=>{fmin=+e.target.value;$('#fl').textContent='Focus session: '+fmin+' min';if(!run&&fm==='focus'){total=rem=fmin*60;draw()}};
+$('#ms').onchange=e=>{if(run)playMusic(e.target.value)};
+const start=()=>{if(run){clearInterval(timer);run=false;$('#st').textContent='▶ Resume';stopAudio();return}
+run=true;endMs=Date.now()+rem*1000;$('#st').textContent='⏸ Pause';playMusic($('#ms').value);
+clearInterval(timer);timer=tick=setInterval(async()=>{rem=Math.max(0,Math.round((endMs-Date.now())/1000));draw();
+if(rem<=0){clearInterval(timer);run=false;stopAudio();try{navigator.vibrate&&navigator.vibrate(400)}catch(e){}
+if(fm==='focus'){const all=focus(),t=today();all[t]=all[t]||{s:0,m:0};all[t].s++;all[t].m+=fmin;S.set('focus_'+user,all);
+const four=all[t].s%4===0;$('#ss').textContent='Sessions today: '+all[t].s+' of 4 · '+all[t].m+' min focused';
+const[b]=await dlg('Session complete! Great focus. '+(four?'4 sessions done: take a 15-minute break?':'Start a 5-minute break?'),['Not now','Start break']);
+if(b==='Start break'){setPhase('break',four?900:300);start()}else setPhase('focus',fmin*60)}
+else{await dlg('Break over. Ready for another session?',['OK']);setPhase('focus',fmin*60)}}},500)};
+$('#st').onclick=start;
+$('#rs').onclick=()=>{clearInterval(timer);stopAudio();setPhase(fm,fm==='focus'?fmin*60:300)};
+$('#bk').onclick=()=>{clearInterval(timer);stopAudio();fm==='focus'?setPhase('break',300):setPhase('focus',fmin*60)};
+$('#rg').onclick=start;
+if(!fmin)fmin=25;if(rem<=0||!run&&fm==='focus'){rem=fm==='focus'?fmin*60:rem;total=fm==='focus'?fmin*60:total;draw()}})}
+async function tryLeave(){if(run){const[r]=await dlg('A session is running. Stop it and leave?',['Stay','Leave']);if(r!=='Leave')return;run=false}dash()}
+/* ---------- tambayan ---------- */
+let tab='chat',gc=S.get('group_code','Group4');
+function tambayan(){go(()=>{const K='tambayan_'+gc,D='tambayan_docs_'+gc,msgs=S.get(K,[]),docs=S.get(D,[]);
+const ico=u=>/\.pdf/i.test(u)?'📕':/\.ppt/i.test(u)?'📙':/\.xls/i.test(u)?'📗':/\.doc/i.test(u)?'📘':'🔗';
+app.innerHTML=bar('Tambayan Group',null,'<button id="mb" aria-label="Members">👥</button>')+`<div class="card"><span class="ok">● Live — group ${esc(gc)}</span> <span class="mu">(shared across tabs on this device)</span>
+<div class="row"><input id="gc" placeholder="Group code" value="${esc(gc)}"><button class="btn sm fix" id="jn">Join</button><button class="btn alt sm fix" id="rf">↻</button></div></div>
+<div class="tabs"><button class="${tab==='chat'?'on':''}" id="t1">💬 Chat</button><button class="${tab==='media'?'on':''}" id="t2">🖼 Media</button></div>
+${tab==='chat'?`<div class="card"><div class="msgs" id="ml">${msgs.map(m=>`<div class="m ${m.u===user?'me':''}"><small>${m.u===user?'You':esc(m.u)} · ${new Date(m.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</small>${esc(m.x)}</div>`).join('')||'<p class="mu">No one has posted yet. Say hi!</p>'}</div>
+<div class="row" style="margin-top:8px"><input id="mg" placeholder="Type a message"><button class="btn sm fix" id="sd">Send</button></div></div>`:
+`<div class="card"><b>📄 Shared Documents</b>${docs.map(d=>`<div class="row" style="margin:8px 0"><span class="fix" style="font-size:24px">${ico(d.url)}</span><div><b>${esc(d.name)}</b><div class="mu">shared by ${esc(d.by)}</div></div><a class="btn sm fix" style="text-decoration:none;text-align:center" href="${esc(d.url)}" target="_blank" rel="noopener">Open</a></div>`).join('')||'<p class="mu">No documents yet. Share a link below.</p>'}
+<input id="dn" placeholder="Document name"><input id="du" placeholder="Paste link (Google Drive, Docs, Slides…)"><button class="btn" id="sh">Share document</button></div>`}`;
+const ml=$('#ml');if(ml)ml.scrollTop=1e9;
+$('#t1').onclick=()=>{tab='chat';tambayan()};$('#t2').onclick=()=>{tab='media';tambayan()};$('#rf').onclick=tambayan;
+$('#jn').onclick=()=>{const c=$('#gc').value.trim();if(!c)return toast('Enter a group code.');gc=c;S.set('group_code',c);tambayan()};
+$('#mb').onclick=()=>dlg('People who have posted in this group:\n'+([...new Set(msgs.map(m=>m.u))].join(', ')||'No one yet.'),['OK']);
+if($('#sd')){const send=()=>{const x=$('#mg').value.trim();if(!x)return toast('Type a message first.');msgs.push({u:user,x,t:Date.now()});S.set(K,msgs);tambayan()};$('#sd').onclick=send;$('#mg').onkeydown=e=>e.key==='Enter'&&send()}
+if($('#sh'))$('#sh').onclick=()=>{const n=$('#dn').value.trim(),u=$('#du').value.trim();if(!n||!u)return toast('Enter a name and a link.');if(!/^https?:\/\//i.test(u))return toast('The link must start with http:// or https://');docs.push({name:n,url:u,by:user});S.set(D,docs);toast('Document shared with the group.');tambayan()};
+tick=setInterval(()=>{if(document.activeElement&&document.activeElement.tagName==='INPUT')return;const n=S.get(K,[]).length,m=S.get(D,[]).length;if(n!==msgs.length||m!==docs.length)tambayan()},3000)})}
+/* ---------- quiz ---------- */
+let Q=[],qi=0,score=0,missed=[],answered=false;
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function build(notes,n){const sents=notes.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(s=>s.split(/\s+/).length>=6);
+const pick=s=>{const w=s.replace(/[^\w\s'-]/g,'').split(/\s+/).filter(x=>x.length>=6);return w.sort((a,b)=>b.length-a.length)[0]};
+const items=sents.map(s=>({s,t:pick(s)})).filter(x=>x.t);const terms=[...new Set(items.map(x=>x.t.toLowerCase()))];
+if(items.length<3||terms.length<4)return null;
+return shuf(items).slice(0,n).map(it=>{const d=shuf(terms.filter(t=>t!==it.t.toLowerCase())).slice(0,3),opts=shuf([it.t.toLowerCase(),...d]);
+return{q:it.s.replace(new RegExp(it.t,'i'),'_____'),o:opts,a:opts.indexOf(it.t.toLowerCase()),src:it.s}})}
+function quiz(){go(()=>{app.innerHTML=bar('Quiz AI')+`<div class="card"><b>Upload study material</b><textarea id="nt" placeholder="Paste your notes here (at least 5 full sentences)…"></textarea>
+<div class="row"><button class="btn alt" id="ld">Load my last notes</button><label class="btn alt" style="text-align:center;margin:5px 0">📁 .txt file<input type="file" id="fl" accept=".txt" hidden></label></div>
+<select id="n"><option value="5">5 questions</option><option value="10">10 questions</option><option value="15">15 questions</option></select>
+<p class="mu">On-device quiz builder (no AI server set).</p><button class="btn" id="gn">✦ Generate Quiz</button></div>`;
+$('#ld').onclick=()=>{const n=S.get('notes_'+user,'');if(n){$('#nt').value=n;toast('Loaded your last saved notes.')}else toast('No saved notes yet.')};
+$('#fl').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(t=>$('#nt').value=t)};
+$('#gn').onclick=()=>{const t=$('#nt').value.trim();if(!t)return toast('Paste some notes first.');S.set('notes_'+user,t);
+const q=build(t,+$('#n').value);if(!q)return toast('Not enough material. Paste longer notes: several full sentences with specific terms.');Q=q;qi=0;score=0;missed=[];ask()}})}
+function ask(){const q=Q[qi];answered=false;
+app.innerHTML=bar('Quiz AI',"quiz()")+`<div class="card"><b>Question ${qi+1} of ${Q.length}</b><p>Choose the best answer:</p><p>${esc(q.q)}</p>
+${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${'ABCD'[i]}&nbsp;&nbsp;${esc(o)}</button>`).join('')}<p id="fb" class="mu">Choose an answer</p><button class="btn" id="nx" disabled>Next ›</button></div>`;
+document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(answered)return;answered=true;const i=+b.dataset.i;
+document.querySelectorAll('.opt')[q.a].classList.add('good');if(i===q.a){score++;$('#fb').innerHTML='<b class="ok">✓ Correct!</b>'}else{b.classList.add('bad');missed.push(q);$('#fb').innerHTML='<b class="err">✗ Not quite.</b> Correct answer: '+'ABCD'[q.a]+'<br><span class="mu">Source: '+esc(q.src)+'</span>'}
+$('#nx').disabled=false;$('#nx').textContent=qi+1>=Q.length?'See results':'Next ›'});
+$('#nx').onclick=()=>{qi++;qi<Q.length?ask():results()}}
+function results(){const best=S.get('quizbest_'+user,0),pc=Math.round(score/Q.length*100);if(pc>best)S.set('quizbest_'+user,pc);
+app.innerHTML=bar('Quiz AI',"quiz()")+`<div class="card" style="text-align:center"><h2>Quiz complete</h2><p style="font-size:34px;margin:6px">Score: ${score} / ${Q.length}</p>
+<p>${pc>=80?'Excellent. You know this material well.':pc>=50?'Good progress. Review the missed ones and retry.':'Keep going. Re-read your notes, then generate a new quiz.'}</p>
+${missed.length?`<button class="btn" id="rt">Retry missed (${missed.length})</button>`:''}<button class="btn alt" id="nw">New quiz</button></div>`;
+if($('#rt'))$('#rt').onclick=()=>{Q=shuf(missed);qi=0;score=0;missed=[];ask()};$('#nw').onclick=quiz}
+/* ---------- coach ---------- */
+const TIPS=['Use 25-minute focus blocks with 5-minute breaks. Put your phone out of reach.','Start with the task you are avoiding for just 10 minutes. Starting is the hard part.','Study actively: close your notes and write down everything you remember, then check.','For exams, practice with past questions or build a quiz from your notes in Quiz AI.','Sleep and short walks help memory more than a late-night cram session.','Plan tomorrow tonight: pick your top three tasks and put them in the Smart Planner.'];
+function coach(){go(()=>{let chat=S.get('coachchat_'+user,[]);
+app.innerHTML=bar('Coach AI')+`<div class="card row"><span class="fix" style="font-size:40px">🎓</span><div><b>Hi! I'm your StudyMate Coach. I can help you plan, learn, and stay on track.</b><div class="mu">What would you like help with today?</div></div></div>
+<button class="nav" id="a1"><i>📋</i><span>Plan my study session</span>›</button><button class="nav" id="a2"><i>💡</i><span>Explain this topic</span>›</button><button class="nav" id="a3"><i>📈</i><span>Review my progress</span>›</button>
+<div class="row" style="margin:0 12px"><button class="btn alt" id="tp">💡 Study tip</button><button class="btn alt" id="cl">🗑 Clear chat</button></div>
+<div class="card"><div class="msgs" id="ml"></div><div class="row" style="margin-top:8px"><input id="mg" placeholder="Type a message or a topic"><button class="btn sm fix" id="sd">➤ Send</button></div></div>`;
+const draw=()=>{$('#ml').innerHTML=chat.map(m=>`<div class="m ${m.r==='You'?'me':''}"><small>${m.r}</small>${esc(m.x)}</div>`).join('')||'<p class="mu">Ask me anything about your studies.</p>';$('#ml').scrollTop=1e9;S.set('coachchat_'+user,chat)};
+const add=(r,x)=>{chat.push({r,x});draw()};
+const doPlan=()=>{const t=today(),lim=new Date();lim.setDate(lim.getDate()+14);const o=tasks().filter(x=>!x.done&&x.date<=ds(lim)).sort((a,b)=>a.date<b.date?-1:1);
+if(!o.length)return 'You have no open tasks in the next two weeks. Add some in Smart Planner, then ask me again.';
+let b=0,l=o.map(x=>{const w={Exam:4,Project:3,Quiz:2,Assignment:2}[x.cat]||1;b+=w;return (x.date<t?'⚠ OVERDUE: ':'• ')+x.title+' ['+x.subj+'], '+(x.date<t?'was due ':'due ')+x.date+' ~ '+w+' focus block(s)'}).join('\n');
+return 'Here is your plan, earliest deadline first:\n'+l+'\nThat is about '+b+' focus block(s) of 25 minutes ('+b*25+' min). Do overdue items first, take a 5-minute break after each block, and log them in Focus Room.'};
+const doReview=()=>{const s=stats();return 'Your progress\n• Focus today: '+s.sessToday+' of 4 sessions\n• Total focus: '+s.sessTotal+' sessions ('+s.minTotal+' min)\n• Tasks done today: '+s.doneToday+'\n• Tasks completed overall: '+s.doneTotal+'\n• Open tasks: '+s.open+' ('+s.overdue+' overdue)\n• Streak: '+s.streak+' day(s)\n\n'+(s.overdue?'Advice: clear your overdue tasks first, even a 25-minute block helps.':s.sessToday===0?'Advice: start with one 25-minute focus session to get going.':s.sessToday>=4?"Advice: you hit today's focus goal. Rest and review what you studied.":'Advice: '+(4-s.sessToday)+" more session(s) reaches today's goal.")};
+const explain=async topic=>{add('Coach','Looking up "'+topic+'"…');let out;try{const r=await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(topic.replace(/ /g,'_')));const j=await r.json();if(!j.extract)throw 0;out='📖 '+j.extract+'\n\n(Source: Wikipedia.) Now try explaining it in your own words, then test yourself in Quiz AI.'}
+catch(e){out='I could not find an article for "'+topic+'" (or you are offline). Try this: 1) Define it in one sentence. 2) Explain it to a friend in simple words. 3) Write one example, then quiz yourself in Quiz AI.'}
+chat.pop();add('Coach',out)};
+const route=txt=>{const l=txt.toLowerCase();
+if(/plan|schedule|what should i study/.test(l))return add('Coach',doPlan());
+if(/progress|how am i|review/.test(l))return add('Coach',doReview());
+const m=l.match(/^(explain|what is|what are|define|tell me about)\s+(.+)/);if(m)return explain(txt.slice(txt.length-m[2].length).replace(/[?.!]+$/,''));
+if(/tip|focus|procrast|exam|motivat|stress/.test(l))return add('Coach',TIPS[Math.floor(Math.random()*TIPS.length)]);
+add('Coach','Try: "plan my week", "review my progress", "explain photosynthesis", or ask for a study tip.')};
+const send=()=>{const x=$('#mg').value.trim();if(!x)return;$('#mg').value='';add('You',x);route(x)};
+$('#sd').onclick=send;$('#mg').onkeydown=e=>e.key==='Enter'&&send();
+$('#a1').onclick=()=>{add('You','Plan my study session');add('Coach',doPlan())};$('#a3').onclick=()=>{add('You','Review my progress');add('Coach',doReview())};
+$('#a2').onclick=()=>{const x=$('#mg').value.trim();if(!x)return add('Coach','Type the topic you want explained in the box, then tap Explain this topic.');$('#mg').value='';add('You','Explain '+x);explain(x)};
+$('#tp').onclick=()=>add('Coach',TIPS[Math.floor(Math.random()*TIPS.length)]);$('#cl').onclick=()=>{chat=[];draw()};draw()})}
+/* ---------- progress ---------- */
+function progress(){go(()=>{const s=stats(),f=focus(),T=tasks(),best=S.get('quizbest_'+user,0);let days=[],wk=0,bd='';
+for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=ds(d),m=(f[k]||{}).m||0,t=T.filter(x=>x.doneOn===k).length;wk+=m;days.push({l:d.toLocaleDateString([], {weekday:'short',day:'numeric'}),m,t})}
+const mx=Math.max(60,...days.map(d=>d.m)),bst=days.reduce((a,b)=>b.m>a.m?b:a);
+app.innerHTML=bar('My Progress')+`<div class="card stats">${[[s.sessTotal,'focus sessions'],[s.minTotal,'focus minutes'],[s.doneTotal,'tasks done'],[s.streak,'day streak'],[s.open,'open tasks'],[best+'%','best quiz score']].map(x=>`<div><b>${x[0]}</b><span class="mu">${x[1]}</span></div>`).join('')}</div>
+<div class="card"><b>Last 7 days: focus minutes</b>${days.map(d=>`<div class="row" style="margin:8px 0"><span class="fix mu" style="width:70px">${d.l}</span><div class="bar"><i style="width:${d.m/mx*100}%"></i></div><span class="fix" style="width:110px;text-align:right">${d.m} min${d.t?' · '+d.t+' task(s) done':''}</span></div>`).join('')}
+<p class="mu">${wk===0?'No focus time yet this week. Start a 25-minute session today.':'This week: '+wk+' min focused, best day '+bst.l+'. '+(wk>=300?'Strong week. Keep the streak going.':'You are '+(300-wk)+' min away from a 5-hour week.')}</p></div>`})}
+/* ---------- settings ---------- */
+function settings(){go(()=>{app.innerHTML=bar('Settings')+`<div class="card"><b>👤 Account</b><p class="mu">Signed in as ${esc(user)}</p><input id="o" type="password" placeholder="Current password"><input id="n" type="password" placeholder="New password (min 6)"><button class="btn" id="cp">Change password</button></div>
+<div class="card"><b>🎯 Study preferences</b><p id="fd">Default focus session: ${S.get('focus_default',25)} min</p><input type="range" id="sl" min="5" max="60" step="5" value="${S.get('focus_default',25)}">
+<div class="sw"><input type="checkbox" id="rm" ${S.get('rem_on',true)?'checked':''}><label for="rm">Reminders on</label></div>
+<div class="sw"><label for="th">Theme</label><select id="th" style="width:auto;margin-left:auto"><option value="">System</option><option>light</option><option>dark</option></select></div></div>
+<div class="card"><b>🗂 My data</b><button class="btn alt" id="wp">Delete my study data</button><button class="btn" id="lo">Log out</button></div>`;
+$('#th').value=S.get('theme','');
+$('#th').onchange=e=>{S.set('theme',e.target.value);applyTheme()};
+$('#sl').oninput=e=>{S.set('focus_default',+e.target.value);fmin=+e.target.value;rem=fmin*60;$('#fd').textContent='Default focus session: '+e.target.value+' min'};
+$('#rm').onchange=e=>S.set('rem_on',e.target.checked);
+$('#cp').onclick=()=>{const acc=S.get('accounts',{}),n=$('#n').value;if(n.length<6)return toast('New password must be at least 6 characters.');if(!acc[user])return toast('Account not found on this device.');if(acc[user]!==hash($('#o').value))return toast('Current password is wrong.');acc[user]=hash(n);S.set('accounts',acc);toast('Password changed.');$('#o').value=$('#n').value=''};
+$('#wp').onclick=async()=>{const[r]=await dlg('Delete all your tasks, reminders, focus history and saved notes on this device? Your account stays.',['Cancel','Delete']);if(r!=='Delete')return;['tasks_','focus_','rem_','notes_','quizbest_','coachchat_'].forEach(p=>S.del(p+user));toast('Your study data was deleted.')};
+$('#lo').onclick=login})}
+function applyTheme(){const t=S.get('theme','');t?document.documentElement.dataset.theme=t:delete document.documentElement.dataset.theme}
+applyTheme();user?dash():login();
+</script></body></html>
